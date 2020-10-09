@@ -4,21 +4,41 @@
     "test": "semistandard && nyc --reporter=lcov mocha tests/*",
     "lint": "semistandard --fix",
     "start": "node server.js",
-    "coverage": "codecov"
+    "coverage": "codecov",
+    "dev": "nodemon"
   },
   "dependencies": {
     "compression": "^1.7.4",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "mongoose": "^5.10.8",
     "morgan": "^1.10.0",
-    "winston": "^3.2.1"
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
-    "codecov": "^3.7.1",
-    "mocha": "^7.1.2",
-    "nodemon": "^2.0.3",
-    "nyc": "^15.0.0",
-    "semistandard": "^14.2.0"
-  }
+    "codecov": "^3.8.0",
+    "mocha": "^7.2.0",
+    "nodemon": "^2.0.4",
+    "nyc": "^15.1.0",
+    "semistandard": "^14.2.3"
+  },
+  "name": "vithack-flippr-backend",
+  "description": "<p align=\"center\">\r \t<img src=\"https://user-images.githubusercontent.com/30529572/92081025-fabe6f00-edb1-11ea-9169-4a8a61a5dd45.png\" />\r \t<h2 align=\"center\">Node.JS template</h2>\r \t<h4 align=\"center\">A template to quickstart Node.JS REST APIs<h4>\r </p>",
+  "version": "1.0.0",
+  "main": "server.js",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TeamRekursion/vithack-flippr-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/TeamRekursion/vithack-flippr-backend/issues"
+  },
+  "homepage": "https://github.com/TeamRekursion/vithack-flippr-backend#readme"
 }
