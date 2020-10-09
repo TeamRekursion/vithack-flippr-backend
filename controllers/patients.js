@@ -588,7 +588,7 @@ class PatientController {
         error: false,
         message: 'Details have been fetched',
         code: 200,
-        recoveredPatients: res
+        patients: res
       };
     } catch (err) {
       logger.error('An Error Occurred: ' + err);
