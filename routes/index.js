@@ -19,4 +19,22 @@ router.post('/all/fetch', async (req, res) => {
     res.status(response.code).send(response);
 });
 
+router.post('/recovered/fetch/India', async (req, res) => {
+    const {startDate, endDate, startAge, endAge, gender} = req.body
+    const response = await PatientController.fetchRecoveredPatientsIndia(startDate, endDate, startAge, endAge, gender);
+    res.status(response.code).send(response);
+});
+
+router.post('/deceased/fetch/India', async (req, res) => {
+    const {startDate, endDate, startAge, endAge, gender} = req.body
+    const response = await PatientController.fetchDeceasedPatientsIndia(startDate, endDate, startAge, endAge, gender);
+    res.status(response.code).send(response);
+});
+
+router.post('/all/fetch/India', async (req, res) => {
+    const {startDate, endDate, startAge, endAge, gender} = req.body
+    const response = await PatientController.fetchAllPatientsIndia(startDate, endDate, startAge, endAge, gender);
+    res.status(response.code).send(response);
+});
+
 module.exports = router;
