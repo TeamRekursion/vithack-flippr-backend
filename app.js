@@ -1,6 +1,7 @@
 const express = require('express');
 const compression = require('compression');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const morgan = require('./logging/morgan');
 const routes = require('./routes/index');
 const logger = require('./logging/logger');
@@ -10,6 +11,7 @@ const app = express();
 // Middlewares
 app.use(express.json());
 app.use(compression());
+app.use(cors());
 require('dotenv').config();
 
 mongoose.connect(
