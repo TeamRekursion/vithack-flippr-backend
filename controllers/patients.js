@@ -4,32 +4,61 @@ const logger = require('../logging/logger');
 class PatientController {
   static async fetchRecoveredPatients(startDate, endDate, startAge, endAge, gender, state) {
     try {
-      const patients = await Patients.aggregate([
-        {
-          $match: {
-            status: "Recovered",
-            reportedOn: {
-              $gte: new Date(startDate),
-              $lte: new Date(endDate)
+      let patients
+      if(gender){
+        patients = await Patients.aggregate([
+          {
+            $match: {
+              status: "Recovered",
+              reportedOn: {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate)
+              },
+              ageEstimate: {
+                $gte: startAge,
+                $lte: endAge
+              },
+              gender: gender,
+              state: state
             },
-            ageEstimate: {
-              $gte: startAge,
-              $lte: endAge
-            },
-            gender: gender,
-            state: state
           },
-        },
-        {
-          $group: {
-            _id: "$reportedOn",
-            // res: {
-            //   $push: "$$ROOT"
-            // },
-            count: {$sum : 1}
+          {
+            $group: {
+              _id: "$reportedOn",
+              // res: {
+              //   $push: "$$ROOT"
+              // },
+              count: {$sum : 1}
+            }
           }
-        }
-      ]);
+        ]);
+      } else{
+        patients = await Patients.aggregate([
+          {
+            $match: {
+              status: "Recovered",
+              reportedOn: {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate)
+              },
+              ageEstimate: {
+                $gte: startAge,
+                $lte: endAge
+              },
+              state: state
+            },
+          },
+          {
+            $group: {
+              _id: "$reportedOn",
+              // res: {
+              //   $push: "$$ROOT"
+              // },
+              count: {$sum : 1}
+            }
+          }
+        ]);
+      }
       return {
         error: false,
         message: 'Details have been fetched',
@@ -48,32 +77,61 @@ class PatientController {
 
   static async fetchDeceasedPatients(startDate, endDate, startAge, endAge, gender, state) {
     try {
-      const patients = await Patients.aggregate([
-        {
-          $match: {
-            status: "Deceased",
-            reportedOn: {
-              $gte: new Date(startDate),
-              $lte: new Date(endDate)
+      let patients
+      if(gender){
+        patients = await Patients.aggregate([
+          {
+            $match: {
+              status: "Deceased",
+              reportedOn: {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate)
+              },
+              ageEstimate: {
+                $gte: startAge,
+                $lte: endAge
+              },
+              gender: gender,
+              state: state
             },
-            ageEstimate: {
-              $gte: startAge,
-              $lte: endAge
-            },
-            gender: gender,
-            state: state
           },
-        },
-        {
-          $group: {
-            _id: "$reportedOn",
-            // res: {
-            //   $push: "$$ROOT"
-            // },
-            count: {$sum : 1}
+          {
+            $group: {
+              _id: "$reportedOn",
+              // res: {
+              //   $push: "$$ROOT"
+              // },
+              count: {$sum : 1}
+            }
           }
-        }
-      ]);
+        ]);
+      } else {
+        patients = await Patients.aggregate([
+          {
+            $match: {
+              status: "Deceased",
+              reportedOn: {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate)
+              },
+              ageEstimate: {
+                $gte: startAge,
+                $lte: endAge
+              },
+              state: state
+            },
+          },
+          {
+            $group: {
+              _id: "$reportedOn",
+              // res: {
+              //   $push: "$$ROOT"
+              // },
+              count: {$sum: 1}
+            }
+          }
+        ]);
+      }
       return {
         error: false,
         message: 'Details have been fetched',
@@ -92,58 +150,113 @@ class PatientController {
 
   static async fetchAllPatients(startDate, endDate, startAge, endAge, gender, state) {
     try {
-      const deceasedPatients = await Patients.aggregate([
-        {
-          $match: {
-            status: "Deceased",
-            reportedOn: {
-              $gte: new Date(startDate),
-              $lte: new Date(endDate)
+      let deceasedPatients
+      let recoveredPatients
+      if(gender){
+        deceasedPatients = await Patients.aggregate([
+          {
+            $match: {
+              status: "Deceased",
+              reportedOn: {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate)
+              },
+              ageEstimate: {
+                $gte: startAge,
+                $lte: endAge
+              },
+              gender: gender,
+              state: state
             },
-            ageEstimate: {
-              $gte: startAge,
-              $lte: endAge
-            },
-            gender: gender,
-            state: state
           },
-        },
-        {
-          $group: {
-            _id: "$reportedOn",
-            // res: {
-            //   $push: "$$ROOT"
-            // },
-            count: {$sum : 1}
+          {
+            $group: {
+              _id: "$reportedOn",
+              // res: {
+              //   $push: "$$ROOT"
+              // },
+              count: {$sum : 1}
+            }
           }
-        }
-      ]);
-      const recoveredPatients = await Patients.aggregate([
-        {
-          $match: {
-            status: "Recovered",
-            reportedOn: {
-              $gte: new Date(startDate),
-              $lte: new Date(endDate)
+        ]);
+        recoveredPatients = await Patients.aggregate([
+          {
+            $match: {
+              status: "Recovered",
+              reportedOn: {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate)
+              },
+              ageEstimate: {
+                $gte: startAge,
+                $lte: endAge
+              },
+              gender: gender,
+              state: state
             },
-            ageEstimate: {
-              $gte: startAge,
-              $lte: endAge
-            },
-            gender: gender,
-            state: state
           },
-        },
-        {
-          $group: {
-            _id: "$reportedOn",
-            // res: {
-            //   $push: "$$ROOT"
-            // },
-            count: {$sum : 1}
+          {
+            $group: {
+              _id: "$reportedOn",
+              // res: {
+              //   $push: "$$ROOT"
+              // },
+              count: {$sum : 1}
+            }
           }
-        }
-      ]);
+        ]);
+      } else {
+        deceasedPatients = await Patients.aggregate([
+          {
+            $match: {
+              status: "Deceased",
+              reportedOn: {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate)
+              },
+              ageEstimate: {
+                $gte: startAge,
+                $lte: endAge
+              },
+              state: state
+            },
+          },
+          {
+            $group: {
+              _id: "$reportedOn",
+              // res: {
+              //   $push: "$$ROOT"
+              // },
+              count: {$sum: 1}
+            }
+          }
+        ]);
+        recoveredPatients = await Patients.aggregate([
+          {
+            $match: {
+              status: "Recovered",
+              reportedOn: {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate)
+              },
+              ageEstimate: {
+                $gte: startAge,
+                $lte: endAge
+              },
+              state: state
+            },
+          },
+          {
+            $group: {
+              _id: "$reportedOn",
+              // res: {
+              //   $push: "$$ROOT"
+              // },
+              count: {$sum: 1}
+            }
+          }
+        ]);
+      }
       return {
         error: false,
         message: 'Details have been fetched',
@@ -163,31 +276,59 @@ class PatientController {
 
   static async fetchRecoveredPatientsIndia(startDate, endDate, startAge, endAge, gender) {
     try {
-      const patients = await Patients.aggregate([
-        {
-          $match: {
-            status: "Recovered",
-            reportedOn: {
-              $gte: new Date(startDate),
-              $lte: new Date(endDate)
+      let patients
+      if(gender){
+        patients = await Patients.aggregate([
+          {
+            $match: {
+              status: "Recovered",
+              reportedOn: {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate)
+              },
+              ageEstimate: {
+                $gte: startAge,
+                $lte: endAge
+              },
+              gender: gender
             },
-            ageEstimate: {
-              $gte: startAge,
-              $lte: endAge
-            },
-            gender: gender
           },
-        },
-        {
-          $group: {
-            _id: "$reportedOn",
-            // res: {
-            //   $push: "$$ROOT"
-            // },
-            count: {$sum : 1}
+          {
+            $group: {
+              _id: "$reportedOn",
+              // res: {
+              //   $push: "$$ROOT"
+              // },
+              count: {$sum : 1}
+            }
           }
-        }
-      ]);
+        ]);
+      } else{
+        patients = await Patients.aggregate([
+          {
+            $match: {
+              status: "Recovered",
+              reportedOn: {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate)
+              },
+              ageEstimate: {
+                $gte: startAge,
+                $lte: endAge
+              },
+            },
+          },
+          {
+            $group: {
+              _id: "$reportedOn",
+              // res: {
+              //   $push: "$$ROOT"
+              // },
+              count: {$sum : 1}
+            }
+          }
+        ]);
+      }
       return {
         error: false,
         message: 'Details have been fetched',
@@ -206,31 +347,59 @@ class PatientController {
 
   static async fetchDeceasedPatientsIndia(startDate, endDate, startAge, endAge, gender) {
     try {
-      const patients = await Patients.aggregate([
-        {
-          $match: {
-            status: "Deceased",
-            reportedOn: {
-              $gte: new Date(startDate),
-              $lte: new Date(endDate)
+      let patients;
+      if(gender){
+        patients = await Patients.aggregate([
+          {
+            $match: {
+              status: "Deceased",
+              reportedOn: {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate)
+              },
+              ageEstimate: {
+                $gte: startAge,
+                $lte: endAge
+              },
+              gender: gender
             },
-            ageEstimate: {
-              $gte: startAge,
-              $lte: endAge
-            },
-            gender: gender
           },
-        },
-        {
-          $group: {
-            _id: "$reportedOn",
-            // res: {
-            //   $push: "$$ROOT"
-            // },
-            count: {$sum : 1}
+          {
+            $group: {
+              _id: "$reportedOn",
+              // res: {
+              //   $push: "$$ROOT"
+              // },
+              count: {$sum : 1}
+            }
           }
-        }
-      ]);
+        ]);
+      } else {
+        patients = await Patients.aggregate([
+          {
+            $match: {
+              status: "Deceased",
+              reportedOn: {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate)
+              },
+              ageEstimate: {
+                $gte: startAge,
+                $lte: endAge
+              },
+            },
+          },
+          {
+            $group: {
+              _id: "$reportedOn",
+              // res: {
+              //   $push: "$$ROOT"
+              // },
+              count: {$sum : 1}
+            }
+          }
+        ]);
+      }
       return {
         error: false,
         message: 'Details have been fetched',
@@ -249,56 +418,109 @@ class PatientController {
 
   static async fetchAllPatientsIndia(startDate, endDate, startAge, endAge, gender) {
     try {
-      const deceasedPatients = await Patients.aggregate([
-        {
-          $match: {
-            status: "Deceased",
-            reportedOn: {
-              $gte: new Date(startDate),
-              $lte: new Date(endDate)
+      let deceasedPatients
+      let recoveredPatients
+      if(gender){
+        deceasedPatients = await Patients.aggregate([
+          {
+            $match: {
+              status: "Deceased",
+              reportedOn: {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate)
+              },
+              ageEstimate: {
+                $gte: startAge,
+                $lte: endAge
+              },
+              gender: gender,
             },
-            ageEstimate: {
-              $gte: startAge,
-              $lte: endAge
-            },
-            gender: gender
           },
-        },
-        {
-          $group: {
-            _id: "$reportedOn",
-            // res: {
-            //   $push: "$$ROOT"
-            // },
-            count: {$sum : 1}
+          {
+            $group: {
+              _id: "$reportedOn",
+              // res: {
+              //   $push: "$$ROOT"
+              // },
+              count: {$sum : 1}
+            }
           }
-        }
-      ]);
-      const recoveredPatients = await Patients.aggregate([
-        {
-          $match: {
-            status: "Recovered",
-            reportedOn: {
-              $gte: new Date(startDate),
-              $lte: new Date(endDate)
+        ]);
+        recoveredPatients = await Patients.aggregate([
+          {
+            $match: {
+              status: "Recovered",
+              reportedOn: {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate)
+              },
+              ageEstimate: {
+                $gte: startAge,
+                $lte: endAge
+              },
+              gender: gender
             },
-            ageEstimate: {
-              $gte: startAge,
-              $lte: endAge
-            },
-            gender: gender
           },
-        },
-        {
-          $group: {
-            _id: "$reportedOn",
-            // res: {
-            //   $push: "$$ROOT"
-            // },
-            count: {$sum : 1}
+          {
+            $group: {
+              _id: "$reportedOn",
+              // res: {
+              //   $push: "$$ROOT"
+              // },
+              count: {$sum : 1}
+            }
           }
-        }
-      ]);
+        ]);
+      } else {
+        deceasedPatients = await Patients.aggregate([
+          {
+            $match: {
+              status: "Deceased",
+              reportedOn: {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate)
+              },
+              ageEstimate: {
+                $gte: startAge,
+                $lte: endAge
+              }
+            },
+          },
+          {
+            $group: {
+              _id: "$reportedOn",
+              // res: {
+              //   $push: "$$ROOT"
+              // },
+              count: {$sum: 1}
+            }
+          }
+        ]);
+        recoveredPatients = await Patients.aggregate([
+          {
+            $match: {
+              status: "Recovered",
+              reportedOn: {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate)
+              },
+              ageEstimate: {
+                $gte: startAge,
+                $lte: endAge
+              },
+            },
+          },
+          {
+            $group: {
+              _id: "$reportedOn",
+              // res: {
+              //   $push: "$$ROOT"
+              // },
+              count: {$sum: 1}
+            }
+          }
+        ]);
+      }
       return {
         error: false,
         message: 'Details have been fetched',
