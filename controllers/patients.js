@@ -537,6 +537,68 @@ class PatientController {
       };
     }
   }
+
+  static async fetchAll(startDate, endDate, startAge, endAge, gender, state, status) {
+    try {
+      const patients = [
+        {
+          $match: {
+            status: status,
+          },
+        },
+        {
+          $group: {
+            _id: "$reportedOn",
+            count: {$sum : 1}
+          }
+        }
+      ]
+      if(startDate) {
+        if(!patients[0].$match.reportedOn){
+          patients[0].$match.reportedOn = {}
+        }
+        patients[0].$match.reportedOn.$gte = new Date(startDate);
+      }
+      if(endDate) {
+        if(!patients[0].$match.reportedOn){
+          patients[0].$match.reportedOn = {}
+        }
+        patients[0].$match.reportedOn.$lte = new Date(endDate);
+      }
+      if(startAge) {
+        if(!patients[0].$match.ageEstimate){
+          patients[0].$match.ageEstimate = {}
+        }
+        patients[0].$match.ageEstimate.$gte = startAge;
+      }
+      if(endAge) {
+        if(!patients[0].$match.ageEstimate){
+          patients[0].$match.ageEstimate = {}
+        }
+        patients[0].$match.ageEstimate.$lte = endAge;
+      }
+      if(gender) {
+        patients[0].$match.gender = gender;
+      }
+      if(state) {
+        patients[0].$match.state = state;
+      }
+      const res = await Patients.aggregate(patients);
+      return {
+        error: false,
+        message: 'Details have been fetched',
+        code: 200,
+        recoveredPatients: res
+      };
+    } catch (err) {
+      logger.error('An Error Occurred: ' + err);
+      return {
+        error: true,
+        message: 'An error occurred: ' + err,
+        code: 500
+      };
+    }
+  }
 }
 
 module.exports = PatientController;

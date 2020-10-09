@@ -37,4 +37,10 @@ router.post('/all/fetch/India', async (req, res) => {
     res.status(response.code).send(response);
 });
 
+router.post('/fetch', async (req, res) => {
+    const {startDate, endDate, startAge, endAge, gender,state, status} = req.body
+    const response = await PatientController.fetchAll(startDate, endDate, startAge, endAge, gender, state, status);
+    res.status(response.code).send(response);
+});
+
 module.exports = router;
