@@ -20,8 +20,10 @@ router.get("/getMedicalSchools", async(req, res) => {
 })
 
 router.get("/getState", async(req, res)=> {
-    const ip = req.connection.remoteAddress
+    const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    console.log(ip);
     const { payload, code } = await statewiseController.getState(ip)
+    payload.ip = ip;
     res.status(code).send(payload)
 })
 
