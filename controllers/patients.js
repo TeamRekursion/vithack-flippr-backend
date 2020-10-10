@@ -569,13 +569,13 @@ class PatientController {
         if(!patients[0].$match.ageEstimate){
           patients[0].$match.ageEstimate = {}
         }
-        patients[0].$match.ageEstimate.$gte = startAge;
+        patients[0].$match.ageEstimate.$gte = parseInt(startAge);
       }
       if(endAge) {
         if(!patients[0].$match.ageEstimate){
           patients[0].$match.ageEstimate = {}
         }
-        patients[0].$match.ageEstimate.$lte = endAge;
+        patients[0].$match.ageEstimate.$lte = parseInt(endAge);
       }
       if(gender) {
         patients[0].$match.gender = gender;
