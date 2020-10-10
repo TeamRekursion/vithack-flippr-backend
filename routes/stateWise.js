@@ -24,6 +24,9 @@ router.get("/getState", async(req, res)=> {
     console.log(ip);
     const { payload, code } = await statewiseController.getState(ip)
     payload.ip = ip;
+    if(payload.data.regionName === "National Capital Territory of Delhi"){
+        payload.data.regionName = "Delhi"
+    }
     res.status(code).send(payload)
 })
 
