@@ -142,3 +142,22 @@ module.exports.getMedicalCollegesController = async(state) => {
         }
     }
 }
+
+module.exports.getState = async (ip) => {
+    try {
+        let data = await fetch("http://ip-api.com/json/" + ip);
+        const body = await data.json()
+        return {
+            code: 200,
+            payload: {
+                error: false,
+                data: body,
+            }
+        }
+    } catch (e) {
+        return {
+            error: true,
+            e,
+        }
+    }
+}

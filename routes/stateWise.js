@@ -19,5 +19,10 @@ router.get("/getMedicalSchools", async(req, res) => {
     res.status(code).send(payload)
 })
 
+router.get("/getState", async(req, res)=> {
+    const ip = req.connection.remoteAddress
+    const { payload, code } = await statewiseController.getState(ip)
+    res.status(code).send(payload)
+})
 
 module.exports = router;
