@@ -6,7 +6,7 @@ const morgan = require('./logging/morgan');
 const routes = require('./routes/index');
 const logger = require('./logging/logger');
 const stateWiseRoutes = require('./routes/stateWise');
-const router = require('./routes/index');
+
 const app = express();
 
 // Middlewares
