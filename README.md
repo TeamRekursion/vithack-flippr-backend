@@ -32,6 +32,7 @@ npm run lint
 | :------------- | :----------: |
 | DB_CONNECTION | **mongo://localhost:27017**   |
 | PORT   | **3000** |
+| SENDGRID_API_KEY  | **some key** |
 
 ## Contributors
 - Md Hishaam Akhtar
