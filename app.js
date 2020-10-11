@@ -10,7 +10,7 @@ const stateWiseRoutes = require('./routes/stateWise');
 const app = express();
 
 // Middlewares
-app.use(express.json());
+app.use(express.json({limit: "100mb"}));
 app.use(compression());
 app.use(cors());
 require('dotenv').config();
