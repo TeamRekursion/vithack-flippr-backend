@@ -1,5 +1,8 @@
 const Patients = require('../models/patients');
 const logger = require('../logging/logger');
+const sgMail = require('@sendgrid/mail');
+require('dotenv').config()
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 class PatientController {
   static async fetchRecoveredPatients(startDate, endDate, startAge, endAge, gender, state) {
@@ -591,6 +594,38 @@ class PatientController {
         patients: res
       };
     } catch (err) {
+      logger.error('An Error Occurred: ' + err);
+      return {
+        error: true,
+        message: 'An error occurred: ' + err,
+        code: 500
+      };
+    }
+  }
+
+  static async sendEmail(file,email) {
+    try {
+      const msg = {
+        to: email,
+        from: 'hishaamakhtar2001.mha@gmail.com',
+        subject: 'Analytics',
+        text: 'Please find the attachment below',
+        attachments: [
+          {
+            content: file,
+            filename: "attachment.png",
+            type: "application/png",
+            disposition: "attachment"
+          }
+        ]
+      };
+      await sgMail.send(msg);
+      return {
+        error: false,
+        message: 'Email Sent',
+        code: 200
+      };
+    } catch(err){
       logger.error('An Error Occurred: ' + err);
       return {
         error: true,

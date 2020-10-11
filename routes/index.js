@@ -43,5 +43,10 @@ router.post('/fetch', async(req, res) => {
     res.status(response.code).send(response);
 });
 
+router.post('/send/email', async(req, res)=> {
+    const {file,email} = req.body;
+    const response = await PatientController.sendEmail(file,email);
+    res.status(response.code).send(response);
+})
 
 module.exports = router;
